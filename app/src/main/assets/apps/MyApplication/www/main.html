@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>主页面</title>
+
+	</head>
+
+	<body>
+		<div class="mui-content" id="mainPage">
+			定位结果 :
+			<ul>
+				<li v-for="item in result">
+					{{item}}
+				</li>
+			</ul>
+
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/vue.min.js"></script>
+
+		<script>
+			(function($, owner) {
+				
+			      var  mainPage = new Vue({
+			      	el:"#mainPage",
+			      	data:{
+			      	    result:[]
+			      	}
+			      });
+
+
+				$.plusReady(function() {
+
+
+					var bridge = plus.bridge;
+
+					//获取回调的id
+					var callbackId =  bridge.callbackId(function(result){
+						mainPage.result.push(result);
+
+					 }, function(err){
+
+						mainPage.result.push(err);
+					 });
+
+					//调用Java代码
+					plus.bridge.exec("BaiduMapFeature", "getLocation", [callbackId, "secondParam"]);
+
+				});
+
+			}(mui, MainPage={}));
+		</script>
+	</body>
+
+</html>
